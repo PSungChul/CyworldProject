@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="s">
+	
+	<!-- 플랫폼별 가입자 조회 -->
+	<select id="join" resultType="signup" parameterType="signup">
+		select * from signup where platform=#{platform} and email=#{email}
+	</select>
+	
+	<!-- ID 중복 확인 -->
+	<select id="doubleCheck" resultType="signup" parameterType="signup">
+		select * from signup where userID=#{userID}
+	</select>
+	
+	<!-- 가입전 이름과 주민번호로 가입자 판단 -->
+	<select id="selectJoinCheck" resultType="signup" parameterType="signup">
+		select * from signup where name=#{name} and phoneNumber=#{phoneNumber}
+	</select>
+	
+	<!-- 가입 성공시 고객 정보 저장 -->
+	<insert id="joinSuccess" parameterType="signup">
+		insert into signup values(
+			NULL,
+			#{name},
+			#{userID},
+			#{info},
+			#{identityNum},
+			#{gender},
+			#{email},
+			#{phoneNumber},
+			#{address},
+			#{addressDetail},
+			#{platform},
+			#{minimi},
+			#{dotoryNum},
+			#{mainTitle},
+			#{mainPhoto},
+			#{mainText},
+			#{ilchon},
+			#{today},
+			#{total},
+			#{toDate}
+		)
+	</insert>
+	
+	<!-- ID 찾기 -->
+	<select id="findID" resultType="signup" parameterType="signup">
+		select userId from signup where name=#{name} and phoneNumber=#{phoneNumber}
+	</select>
+	
+	<!-- PW 찾기 -->
+	<select id="findPW" resultType="signup" parameterType="signup">
+		select info from signup where name=#{name} and userId=#{userID} and email=#{email}
+	</select>
+	
+	<!-- 임시 PW 갱신 -->
+	<update id="newPw" parameterType="java.util.HashMap">
+		update signup set info=#{2} where userId=#{1}
+	</update>
+	
+	<!-- IDX기준 회원정보 -->
+	<select id="selectIdx" resultType="signup" parameterType="Object">
+		select * from signup where idx=#{idx}
+	</select>
+	
+	<!-- 로그인시 접속 날짜 기록 -->
+	<update id="updateTodayDate" parameterType="signup">
+		update signup set toDate=#{toDate} where idx=#{idx}
+	</update>
+	
+	<!-- ////////// 도토리 구역 시작 ////////// -->
+	
+	<!-- 도토리 구매 -->
+	<update id="dotory_buy" parameterType="signup">
+		update signup set dotoryNum=#{dotoryNum} where idx=#{idx}
+	</update>
+	
+	<!-- ////////// 도토리 구역 끝 ////////// -->
+	
+	<!-- ////////// 미니미 구매 구역 시작 ////////// -->
+	
+	<!-- 구매한 미니미 전체 조회 -->
+	<select id="selectBuyMinimiList" resultType="buy" parameterType="int">
+		select * from buyminimi where buyIdx=#{idx}
+	</select>
+	
+	<!-- 구매한 미니미 추가 -->
+	<insert id="insertBuyMinimi" parameterType="buy">
+		insert into buyminimi values(
+			#{buyIdx},
+			#{buyMinimiName}
+		)
+	</insert>
+	
+	<!-- 미니미를 구매하고 줄어든 도토리 보유 개수 갱신 -->
+	<update id="updateDotoryNum" parameterType="signup">
+		update signup set dotoryNum=#{dotoryNum} where idx=#{idx}
+	</update>
+	
+	<!-- 이미 구매한 미니미인지 조회 -->
+	<select id="selectIdxBuyMinimi" resultType="buy" parameterType="buy">
+		select * from buyminimi where buyIdx=#{buyIdx} and buyMinimiName=#{buyMinimiName}
+	</select>
+	
+	<!-- ////////// 미니미 구매 구역 끝 ////////// -->
+	
+	<!-- ////////// 프로필 구역 시작 ////////// -->
+	
+	<!-- 프로필 조회 -->
+	<select id="profile_list" resultType="signup" parameterType="int">
+		select * from signup where idx=#{idx}
+	</select>
+	
+	<!-- 프로필 미니미 변경 -->
+	<update id="profile_minimi" parameterType="signup">
+		update signup set minimi=#{minimi} where idx=#{idx}
+	</update>
+	
+	<!-- 프로필 좌측 - 메인 사진 및 메인 소개글 수정 -->
+	<update id="profile_modify_main" parameterType="signup">
+		update signup
+			set mainPhoto=#{mainPhoto},
+				mainText=#{mainText}
+			where idx=#{idx}
+	</update>
+	
+	<!-- 프로필 우측 (cyworld 가입자) - 메인 타이틀 및 비밀번호 수정 -->
+	<update id="profile_modify_userdata" parameterType="signup">
+		update signup
+			set info=#{info},
+				mainTitle=#{mainTitle}
+			where idx=#{idx}
+	</update>
+	
+	<!-- 프로필 우측 (소셜 가입자) - 비밀번호 없이 메인 타이틀만 수정 -->
+	<update id="profile_modify_social_userdata" parameterType="signup">
+		update signup
+			set mainTitle=#{mainTitle}
+			where idx=#{idx}
+	</update>
+	
+	<!-- ////////// 프로필 구역 끝 ////////// -->
+	
+</mapper>
