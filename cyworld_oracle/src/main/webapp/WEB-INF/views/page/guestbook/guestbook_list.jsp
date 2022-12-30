@@ -65,8 +65,8 @@
 							<h1>방명록 </h1>
 							<input class="textWrite" id="btn_cover" type="button" value="방명록 작성" onclick="location.href='guestbook_insert_form.do?idx=${signVo.idx}'">
 						</div>
-						
-						<c:forEach var="vo" items="${ list }">
+						<!-- varStatus - forEach를 돌리면서 추가로 숫자를 순서대로 지정할 수 있게 만들어준다 -->
+						<c:forEach var="vo" items="${ list }" varStatus="cnt">
 							<div class="guestbook_box">
 								<form>
 									<!-- 방명록 정보 구역 -->
@@ -77,7 +77,8 @@
 										<div class="type_guestbookContentName">${ vo.guestbookContentName }</div>
 										<div class="type_guestbookRegdate">작성일자: (${ vo.guestbookRegdate })</div> 
 										<!-- 좋아요 구역 -->
-										<div class="likeHeart">${ vo.guestbookLikeNum }</div>
+										<!-- ${cnt.index} - forEach에서 생성한 숫자를 id에 추가로 순서대로 지정한다  -->
+										<div class="likeHeart" id="guestbookLikeNum${ cnt.index }">${ vo.guestbookLikeNum }</div>
 										<input id="heart" type="button"  onclick="like(this.form)">
 										<!-- 로그인한 유저가 작성자 이거나 방명록 주인일 경우에만 보인다 -->
 										<c:if test="${ sessionIdx eq vo.guestbookSession || sessionIdx eq vo.guestIdx }">
@@ -211,11 +212,25 @@
 		// 좋아요 콜백메소드
 		function resultLike() {
 			if ( xhr.readyState == 4 && xhr.status == 200 ) {
+				// Controller에서 보낸 VO가 JSON형태로 들어온다
 				let data = xhr.responseText;
 				
-				// 콜백으로 받아서 페이지를 갱신하지 않고 바로 바꿀수 있는 방법 구상중
-				// 현제는 별다른 방법이 없어서 갱신하는 방법 이용중
-				location.href = "guestbook.do?idx=${param.idx}"
+				// JSON형태로 들어온 data를 실제 JSON타입으로 변경
+				var json = (new Function('return'+data))();
+				
+				// 방명록 번호 - name으로 가져와 배열로 생성
+				let guestbookContentRef = document.getElementsByName("guestbookContentRef");
+				
+				// 가져온 방명록 번호로 for문 생성
+				for ( let i = 0; i < guestbookContentRef.length; i++ ) {
+					// VO로 가져온 정보중 방명록 번호를 가져와 일치하는 방명록이 나올때까지 for문을 돌린다
+					if ( guestbookContentRef[i].value == json.guestbookContentRef ) {
+						// 좋아요 수가 작성되는곳을 id로 가져오는데 추가로 같이 작성한 숫자로 어느 방명록의 좋아요인지 찾는다
+						let guestbookLikeNum = document.getElementById("guestbookLikeNum" + i);
+						// VO로 가져온 정보중 좋아요 수를 가져와 작성한다
+						guestbookLikeNum.innerText = json.guestbookLikeNum;
+					}
+				}
 			}
 		}
 	</script>

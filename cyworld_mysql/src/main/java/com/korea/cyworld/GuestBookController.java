@@ -391,7 +391,7 @@ public class GuestBookController {
 		// 수정 페이지로 이동
 		return Common.GBP_PATH + "guestbook_modify_form.jsp";
 	}
-    
+	
 	// 방문글 수정하기
 	@RequestMapping("/guestbook_modify.do")
 	@ResponseBody
@@ -416,14 +416,15 @@ public class GuestBookController {
 	}
 	
 	/////////////// 방명록 좋아요 구역 ///////////////
+	
 	@RequestMapping("/guestbook_like.do")
-	@ResponseBody
-	public String geustbook_like(GuestBookVO vo, GuestBookLikeVO lvo) {
+	@ResponseBody // 콜백 메소드에 VO를 전달
+	public GuestBookVO geustbook_like(GuestBookVO vo, GuestBookLikeVO lvo) {
 		// 세션값이 있는지 확인
 		HttpSession session = request.getSession();
 		if ( session.getAttribute("login") == null ) {
-			// 세션값이 없다면 로그인 페이지로 이동
-			return "redirect:login.do";
+			// 세션값이 없다면 콜백메소드에 null을 전달
+			return null;
 		}
 		
 		// 세션값을 사용하기 위해 Integer타입으로 형변환
@@ -446,10 +447,8 @@ public class GuestBookController {
 			vo.setGuestbookLikeNum(likeCount);
 			// 조회된 좋아요 개수로 갱신
 			guestbook_dao.updateLikeNum(vo);
-			// 콜백 메소드에 가져갈 유저 정보
-			// GuestBookVO gvo = guestbook_dao.selectOne(vo);
-			// 콜백 메소드에 전달
-			return "no";
+			// 콜백 메소드에 VO를 전달
+			return vo;
 		// 좋아요를 안 눌렀을 경우
 		} else {
 			// 좋아요를 누를 경우 좋아요 내역을 추가
@@ -462,8 +461,8 @@ public class GuestBookController {
 			guestbook_dao.updateLikeNum(vo);
 			// 콜백 메소드에 가져갈 유저 정보
 			// GuestBookVO gvo = guestbook_dao.selectOne(vo);
-			// 콜백 메소드에 전달
-			return "yes";
+			// 콜백 메소드에 VO를 전달
+			return vo;
 		}
 	}
 }

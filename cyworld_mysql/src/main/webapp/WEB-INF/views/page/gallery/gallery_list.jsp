@@ -79,8 +79,8 @@
 									<input id="btn-cover" type="button" value="글쓰기" onclick="location.href='gallery_insert_form.do?idx=${signVo.idx}'">
 								</c:if>
 							</div>
-							
-							<c:forEach var="vo" items="${ galleryList }">
+							<!-- varStatus - forEach를 돌리면서 추가로 숫자를 순서대로 지정할 수 있게 만들어준다 -->
+							<c:forEach var="vo" items="${ galleryList }" varStatus="cnt">
 								<div class="gallery_box">
 									<form>
 										<!-- 게시글 정보 구역 -->
@@ -113,7 +113,8 @@
 											<div class="myButton">
 												<!-- 좋아요 구역 -->
 												<p class="like">
-													<span id="galleryLikeNum">${ vo.galleryLikeNum }</span>
+													<!-- ${cnt.index} - forEach에서 생성한 숫자를 id에 추가로 순서대로 지정한다  -->
+													<span id="galleryLikeNum${ cnt.index }">${ vo.galleryLikeNum }</span>
 													<input  id="heart" type="button" onclick="like(this.form)" >
 												</p>
 												<!-- 로그인한 유저가 사진첩 주인일 경우에만 보인다. -->
@@ -148,6 +149,7 @@
 									<!-- 게시글마다 댓글 보이는 구역 -->
 									<c:forEach var="cvo" items="${ commentList }">
 										<form>
+											<!-- 댓글 idx와 사진첩 idx가 같고, 댓글 번호와 게시글 번호가 같을 경우  -->
 											<c:if test="${ cvo.galleryCommentIdx eq vo.galleryIdx && cvo.galleryCommentRef eq vo.galleryContentRef }">
 												<div class="Gallerycomment">
 													<!-- 사진첩 주인 idx -->
@@ -281,11 +283,25 @@
 		// 게시글 좋아요 콜백메소드
 		function resultLike() {
 			if ( xhr.readyState == 4 && xhr.status == 200 ) {
+				// Controller에서 보낸 VO가 JSON형태로 들어온다
 				let data = xhr.responseText;
 				
-				// 콜백으로 받아서 페이지를 갱신하지 않고 바로 바꿀수 있는 방법 구상중
-				// 현제는 별다른 방법이 없어서 갱신하는 방법 이용중
-				location.href = "gallery.do?idx=${param.idx}";
+				// JSON형태로 들어온 data를 실제 JSON타입으로 변경
+				var json = (new Function('return'+data))();
+				
+				// 게시글 번호 - name으로 가져와 배열로 생성
+				let galleryContentRef = document.getElementsByName("galleryContentRef");
+				
+				// 가져온 게시글 번호로 for문 생성
+				for ( let i = 0; i < galleryContentRef.length; i++ ) {
+					// VO로 가져온 정보중 게시글 번호를 가져와 일치하는 게시글이 나올때까지 for문을 돌린다
+					if ( galleryContentRef[i].value == json.galleryContentRef ) {
+						// 좋아요 수가 작성되는곳을 id로 가져오는데 추가로 같이 작성한 숫자로 어느 게시글의 좋아요인지 찾는다
+						let galleryLikeNum = document.getElementById("galleryLikeNum" + i);
+						// VO로 가져온 정보중 좋아요 수를 가져와 작성한다
+						galleryLikeNum.innerText = json.galleryLikeNum;
+					}
+				}
 			}
 		}
 	</script>

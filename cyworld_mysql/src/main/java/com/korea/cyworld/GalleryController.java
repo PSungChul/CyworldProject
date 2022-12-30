@@ -478,13 +478,13 @@ public class GalleryController {
 	/////////////// 사진첩 좋아요 구역 ///////////////
 	
 	@RequestMapping("/gallery_like.do")
-	@ResponseBody
-	public String gallery_like(GalleryVO vo, GalleryLikeVO lvo) {
+	@ResponseBody // 콜백메소드에 VO를 전달
+	public GalleryVO gallery_like(GalleryVO vo, GalleryLikeVO lvo) {
 		// 세션값이 있는지 확인
 		HttpSession session = request.getSession();
 		if ( session.getAttribute("login") == null ) {
-			// 세션값이 없다면 로그인 페이지로 이동
-			return "redirect:login.do";
+			// 세션값이 없다면 콜백메소드에 null을 전달
+			return null;
 		}
 		
 		// 세션값을 사용하기 위해 Integer타입으로 형변환
@@ -507,10 +507,8 @@ public class GalleryController {
 			vo.setGalleryLikeNum(likeCount);
 			// 조회된 좋아요 개수로 갱신
 			gallery_dao.updateLikeNum(vo);
-			// 좋아요 개수를 콜백 메소드에 전달하기 위해 String타입으로 형변환
-			String likeNum = Integer.toString(likeCount);
-			// 콜백 메소드에 전달
-			return likeNum;
+			// 콜백 메소드에 VO를 전달
+			return vo;
 		// 좋아요를 안 눌렀을 경우
 		} else {
 			// 좋아요를 누를 경우 좋아요 내역을 추가
@@ -521,10 +519,8 @@ public class GalleryController {
 			vo.setGalleryLikeNum(likeCount);
 			// 조회된 좋아요 개수로 갱신
 			gallery_dao.updateLikeNum(vo);
-			// 좋아요 개수를 콜백 메소드에 전달하기 위해 String타입으로 형변환
-			String likeNum = Integer.toString(likeCount);
-			// 콜백 메소드에 전달
-			return likeNum;
+			// 콜백 메소드에 VO를 전달
+			return vo;
 		}
 	}
 }
