@@ -80,7 +80,7 @@ public class MainController {
 		
 		// 먼저 접속 날짜를 기록하기 위해 Date객체 사용
 		Date date = new Date();
-		// Date객체를 그냥 사용하면 뒤에 시간까지 모두 기록되기에 날짜만 따로 뺴는 작업을 한다
+		// Date객체를 그냥 사용하면 뒤에 시간까지 모두 기록되기에 날짜만 따로 빼는 작업을 한다
 		SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
 		
 		// 그리고 앞으로 사용할 로그인한 유저의 idx와 해당 미니홈피의 idx와 접속 날짜를 편하게 사용하기 위해 Map으로 만들어 둔다
@@ -95,22 +95,22 @@ public class MainController {
 			// 세션값과 idx값이 다를 경우 - 타 유저 미니홈피 조회 - 조회수 증가 O
 			if ( ( (int)session.getAttribute("login") != idx ) ) {
 				
-				// 그 다음 로그인한 유저의 현재 날짜로 접속 기록이 있는지 조회
+				// 그 다음 로그인한 유저가 해당 미니홈피로 방문 기록이 있는지 조회
 				ViewsVO loginUser = main_dao.selectViewsToday(todayMap);
 				
 				// 그 다음 idx에 해당하는 미니홈피 유저 정보를 조회
 				SignUpVO miniUser = signUp_dao.selectOneIdx(idx);
 				
-				// 로그인한 유저의 조회된 기록이 있을 경우
+				// 로그인한 유저의 방문 기록이 있을 경우
 				if ( loginUser != null ) {
 					
-					// 로그인한 유저의 조회된 기록 중 접속 날짜가 현재 날짜와 다를 경우
+					// 로그인한 유저의 방문 기록 중 방문 날짜가 현재 날짜와 다를 경우
 					if ( !loginUser.getTodayDate().equals(today.format(date)) ) {
 						
-						// 로그인한 유저의 해당 미니홈피 접속 날짜를 현재 날짜로 갱신
+						// 로그인한 유저의 해당 미니홈피 방문 날짜를 현재 날짜로 갱신
 						main_dao.updateViewsToday(todayMap);
 						
-						// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜랑 다를 경우
+						// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜와 다를 경우
 						if ( !miniUser.getToDate().equals(today.format(date)) ) {
 							
 							// 해당 미니홈피 유저의 일일 조회수를 누적 조회수에 추가
@@ -122,7 +122,7 @@ public class MainController {
 							// 수정된 값들로 해당 미니홈피 유저의 유저 정보 갱신
 							main_dao.updateTotalCount(miniUser);
 							
-						// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜랑 같을 경우
+						// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜와 같을 경우
 						} else {
 							
 							// 해당 미니홈피 유저의 일일 조회수 1 증가
@@ -132,20 +132,20 @@ public class MainController {
 							
 						}
 						
-					// 로그인한 유저의 조회된 기록중 접속 날짜가 현재 날짜와 같을 경우
+					// 로그인한 유저의 방문 기록중 방문 날짜가 현재 날짜와 같을 경우
 					} else {
 						
 						// 조회수를 증가시키지 않고 통과
 						
 					}
 					
-				// 로그인한 유저의 조회된 기록이 없을 경우
+				// 로그인한 유저의 방문 기록이 없을 경우
 				} else {
 					
-					// 로그인한 유저의 해당 미니홈피 접속 기록을 추가
+					// 로그인한 유저의 해당 미니홈피 방문 기록을 추가
 					main_dao.insertViewsToday(todayMap);
 					
-					// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜랑 다를 경우
+					// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜와 다를 경우
 					if ( !miniUser.getToDate().equals(today.format(date)) ) {
 						
 						// 해당 미니홈피 유저의 일일 조회수를 누적 조회수에 추가
@@ -157,7 +157,7 @@ public class MainController {
 						// 수정된 값들로 해당 미니홈피 유저의 유저 정보 갱신
 						main_dao.updateTotalCount(miniUser);
 						
-					// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜랑 같을 경우
+					// 해당 미니홈피 유저의 조회된 기록 중 접속 날짜가 현재 날짜와 같을 경우
 					} else {
 						
 						// 해당 미니홈피 유저의 일일 조회수 1 증가
@@ -175,7 +175,7 @@ public class MainController {
 				// 내 미니홈피 접속 날짜 조회
 				SignUpVO svo = signUp_dao.selectOneIdx(session.getAttribute("login"));
 				
-				// 조회된 접속 날짜와 현재 날짜가 다를 경우
+				// 조회된 접속 날짜가 현재 날짜와 다를 경우
 				if ( !svo.getToDate().equals(today.format(date)) ) {
 					
 					// 내 미니홈피의 일일 조회수를 누적 조회수에 추가
@@ -187,7 +187,7 @@ public class MainController {
 					// 수정된 값들로 내 미니홈피 정보 갱신
 					main_dao.updateTotalCount(svo);
 					
-				// 조회된 접속 날짜와 현재 날짜가 같을 경우
+				// 조회된 접속 날짜가 현재 날짜와 같을 경우
 				} else {
 					
 					// 조회수를 증가시키지 않고 통과

@@ -22,19 +22,19 @@ public class MainDAO {
 	
 	/////////////// 조회수 구역 ///////////////
 	
-	// 현재 날짜로 로그인한 유저가 해당 미니홈피에 접속한 기록 조회
+	// 로그인한 유저가 해당 미니홈피로 방문한 기록 조회
 	public ViewsVO selectViewsToday(HashMap<String, Object> map) {
 		ViewsVO vo = sqlSession.selectOne("m.selectViewsToday", map);
 		return vo;
 	}
 	
-	// 검색결과가 없을경우 첫방문 저장
+	// 방문 기록이 없을 경우 첫 방문 저장
 	public int insertViewsToday(HashMap<String, Object> map) {
 		int res = sqlSession.insert("m.insertViewsToday", map);
 		return res;
 	}
 	
-	// 검색결과가 있을경우 날짜비교후 날짜가 다르면 해당 날짜에 현재 날짜 갱신
+	// 방문 기록이 있을 경우 날짜 비교 후 날짜가 다르면 해당 날짜에 현재 날짜로 갱신
 	public int updateViewsToday(HashMap<String, Object> map) {
 		int res = sqlSession.update("m.updateViewsToday", map);
 		return res;
@@ -46,7 +46,7 @@ public class MainDAO {
 		return res;
 	}
 	
-	// 날짜 바뀌어 총합 조회수 증가 및 일일 조회수 초기화
+	// 날짜가 바뀌며 총합 조회수 증가 및 일일 조회수 초기화
 	public int updateTotalCount(SignUpVO vo) {
 		int res = sqlSession.update("m.updateTotalCount", vo);
 		return res;
