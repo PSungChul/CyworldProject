@@ -147,3 +147,136 @@
 		CONSTRAINT fk_GuestBookLikeRef FOREIGN KEY(GuestIdx) REFERENCES GuestBook(GuestBookContentRef) ON DELETE CASCADE ON UPDATE CASCADE, --포린키 연결
 		GuestBookLikeSession NUMBER(38) --로그인 유저 IDX
 	);
+	
+##### 사용된 데이터베이스 : MySQL - Cyworld
+	CREATE DATABASE Cyworld;
+	USE Cyworld;
+
+##### 사용된 테이블 : SignUp, Views, Ilchon, Ilchonpyeong, BuyMinimi, Diary, Gallery, GalleryComment, GalleryLike, GuestBook, GuestBookLike
+	#MySQL
+	
+	#유저 테이블
+	CREATE TABLE SignUp (
+		Idx  INT(3) primary key AUTO_INCREMENT, #IDX - 기본키, 시퀀스
+		Name VARCHAR(50) not null, #이름
+		UserID VARCHAR(30), #ID 
+		Info VARCHAR(30), #PW 
+		IdentityNum VARCHAR(20) not null, #주민번호 
+		Gender VARCHAR(30) not null, #성별
+		Email VARCHAR(50) not null, #Email
+		PhoneNumber VARCHAR(30) not null, #휴대전화
+		Address VARCHAR(255) not null, #주소
+		AddressDetail VARCHAR(255) not null, #상세주소
+		Platform VARCHAR(20), #플랫폼
+		Minimi VARCHAR(30), #미니미 
+		DotoryNum INT(10), #도토리 개수 
+		MainTitle VARCHAR(100), #메인 타이틀
+		MainPhoto VARCHAR(50), #메인 사진
+		MainText VARCHAR(255), #메인 소개글
+		Ilchon INT(38), #일촌 수
+		Today INT(38), #일일 조회수
+		Total INT(38), #총합 조회수
+		ToDate VARCHAR(20) #접속 일자
+	);
+
+	#조회수 테이블
+	CREATE TABLE Views (
+		ViewsIdx INT(38), #미니홈피 유저 IDX
+		ViewsSession INT(38), #로그인 유저 IDX
+		TodayDate VARCHAR(20) #접속 일자
+	);
+
+	#일촌 테이블
+	CREATE TABLE Ilchon (
+		IlchonIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_IlchonIdx FOREIGN KEY(IlchonIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		IlchonSession INT(38), #로그인 유저 IDX
+		IlchonUp INT(38), #일촌 수
+		IlchonName VARCHAR(100) #일촌 이름
+	);
+
+
+	#일촌평 테이블
+	CREATE TABLE Ilchonpyeong (
+		Num INT(38), #일촌평 번호
+		IlchonpyeongText VARCHAR(255), #일촌평 내용
+		IlchonpyeongIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_IlchonpyeongIdx FOREIGN KEY(IlchonpyeongIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		IlchonSession VARCHAR(50) #로그인 유저 IDX
+	);
+
+	#미니미 구매 테이블
+	CREATE TABLE BuyMinimi (
+		BuyIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_BuyIdx FOREIGN KEY(BuyIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		BuyMinimiName VARCHAR(50) #구매한 미니미 이름
+	);
+
+	#다이어리 테이블
+	Create TABLE Diary (
+		DiaryContentRef INT(20), #다이어리 글 번호
+		DiaryContent LONGTEXT, #다이어리 글 내용
+		DiaryRegdate DATETIME, #다이어리 글 작성 일자
+		DiaryIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_DiaryIdx FOREIGN KEY(DiaryIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE #포린키 연결
+	);
+
+	#갤러리 테이블
+	CREATE TABLE Gallery (
+		GalleryContentRef INT(20), #게시글 번호
+		GalleryContent LONGTEXT, #게시글 내용
+		GalleryFileName VARCHAR(50), #게시글 파일 이름
+		GalleryRegdate DATETIME, #게시글 작성 일자
+		GalleryIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_GalleryIdx FOREIGN KEY(GalleryIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GalleryFileExtension VARCHAR(20), #게시글 파일 확장자
+		GalleryLikeNum INT(38), #게시글 좋아요 수
+		GalleryTitle VARCHAR(50) #게시글 제목
+	);
+
+	#갤러리 댓글 테이블
+	CREATE TABLE GalleryComment (
+		GalleryCommentIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_GalleryCommentIdx FOREIGN KEY(GalleryCommentIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GalleryCommentRef INT(38), #게시글 댓글 번호
+		GalleryCommentContent VARCHAR(50), #게시글 댓글 내용
+		GalleryCommentRegdate DATETIME, #게시글 댓글 작성 일자
+		GalleryNum INT(38), #게시글 번호
+		CONSTRAINT fk_GalleryCommentRef FOREIGN KEY(GalleryNum) REFERENCES Gallery(GalleryContentRef) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GalleryCommentDeleteCheck INT(38), #게시글 댓글 삭제 여부
+		GalleryCommentSession INT(38), #로그인 유저 IDX
+		GalleryCommentName VARCHAR(50) #게시글 댓글 작성자 이름
+	);
+
+	#갤러리 좋아요 테이블
+	CREATE TABLE GalleryLike (
+		GalleryLikeIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_GalleryLikeIdx FOREIGN KEY(GalleryLikeIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GalleryLikeRef INT(38), #게시글 번호
+		CONSTRAINT fk_GalleryLikeRef FOREIGN KEY(GalleryIdx) REFERENCES Gallery(GalleryContentRef) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GalleryLikeSession INT(38) #로그인 유저 IDX
+	);
+	SELECT * FROM GalleryLike;
+
+	#방명록 테이블
+	CREATE TABLE GuestBook (
+		GuestBookContentRef INT(5), #방명록 번호
+		GuestBookContent LONGTEXT, #방명록 내용
+		GuestBookContentName VARCHAR(100), #방명록 작성자 이름
+		GuestBookRegdate DATETIME, #방명록 작성 일자
+		GuestIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_GuestIdx FOREIGN KEY(GuestIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GuestBookLikeNum INT(38), #방명록 좋아요 수
+		GuestBookSecretCheck INT(2), #방명록 비밀 여부
+		GuestBookSession INT(38), #로그인 유저 IDX
+		GuestbookMinimi VARCHAR(50) #방명록 작성자 미니미
+	);
+
+	#방명록 좋아요 테이블
+	CREATE TABLE GuestBookLike (
+		GuestBookLikeIdx INT(38), #미니홈피 유저 IDX
+		CONSTRAINT fk_GuestBookLikeIdx FOREIGN KEY(GuestBookLikeIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GuestBookLikeRef INT(38), #방명록 번호
+		CONSTRAINT fk_GuestBookLikeRef FOREIGN KEY(GuestIdx) REFERENCES GuestBook(GuestBookContentRef) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
+		GuestBookLikeSession INT(38) #로그인 유저 IDX
+	);
