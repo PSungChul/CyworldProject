@@ -26,16 +26,16 @@
 
 	--유저 테이블
 	CREATE TABLE SignUp (
-		Idx  NUMBER(3) primary key, --IDX - 기본키, 시퀀스
-		Name VARCHAR2(50) not null, --이름
+		Idx  NUMBER(3) PRIMARY KEY, --IDX - 기본키, 시퀀스
+		Name VARCHAR2(50) NOT NULL, --이름
 		UserID VARCHAR2(30), --ID 
 		Info VARCHAR2(30), --PW 
-		IdentityNum VARCHAR2(20) not null, --주민번호 
-		Gender VARCHAR2(30) not null, --성별
-		Email VARCHAR2(50) not null, --Email
-		PhoneNumber VARCHAR2(30) not null, --휴대전화
-		Address VARCHAR2(255) not null, --주소
-		AddressDetail VARCHAR2(255) not null, --상세주소
+		IdentityNum VARCHAR2(20) NOT NULL, --주민번호 
+		Gender VARCHAR2(30) NOT NULL, --성별
+		Email VARCHAR2(50) NOT NULL, --Email
+		PhoneNumber VARCHAR2(30) NOT NULL, --휴대전화
+		Address VARCHAR2(255) NOT NULL, --주소
+		AddressDetail VARCHAR2(255) NOT NULL, --상세주소
 		Platform VARCHAR2(20), --플랫폼
 		Minimi VARCHAR2(30), --미니미 
 		DotoryNum NUMBER(10), --도토리 개수 
@@ -66,7 +66,7 @@
 
 	--일촌평 테이블
 	CREATE TABLE Ilchonpyeong (
-		Num NUMBER(38), --일촌평 번호
+		Num NUMBER(38) PRIMARY KEY, --일촌평 번호
 		IlchonpyeongText VARCHAR2(255), --일촌평 내용
 		IlchonpyeongIdx NUMBER(38), --미니홈피 유저 IDX
 		CONSTRAINT fk_IlchonpyeongIdx FOREIGN KEY(IlchonpyeongIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, --포린키 연결
@@ -75,14 +75,14 @@
 
 	--미니미 구매 테이블
 	CREATE TABLE BuyMinimi (
-		BuyIdx NUMBER(38), --미니홈피 유저 IDX
+		BuyIdx NUMBER(38) PRIMARY KEY, --미니홈피 유저 IDX
 		CONSTRAINT fk_BuyIdx FOREIGN KEY(BuyIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, --포린키 연결
 		BuyMinimiName VARCHAR2(50) --구매한 미니미 이름
 	);
 
 	--다이어리 테이블
 	CREATE TABLE Diary (
-		DiaryContentRef NUMBER(20), --다이어리 글 번호
+		DiaryContentRef NUMBER(20) PRIMARY KEY, --다이어리 글 번호
 		DiaryContent CLOB, --다이어리 글 내용
 		DiaryRegdate DATE, --다이어리 글 작성 일자
 		DiaryIdx NUMBER(38), --미니홈피 유저 IDX
@@ -91,7 +91,7 @@
 
 	--갤러리 테이블
 	CREATE TABLE Gallery (
-		GalleryContentRef NUMBER(20), --게시글 번호
+		GalleryContentRef NUMBER(20) PRIMARY KEY, --게시글 번호
 		GalleryContent CLOB, --게시글 내용
 		GalleryFileName VARCHAR2(50), --게시글 파일 이름
 		GalleryRegdate DATE, --게시글 작성 일자
@@ -127,7 +127,7 @@
 
 	--방명록 테이블
 	CREATE TABLE GuestBook (
-		GuestBookContentRef NUMBER(5), --방명록 번호
+		GuestBookContentRef NUMBER(5) PRIMARY KEY, --방명록 번호
 		GuestBookContent CLOB, --방명록 내용
 		GuestBookContentName VARCHAR2(100), --방명록 작성자 이름
 		GuestBookRegdate DATE, --방명록 작성 일자
@@ -157,16 +157,16 @@
 	
 	#유저 테이블
 	CREATE TABLE SignUp (
-		Idx  INT(3) primary key AUTO_INCREMENT, #IDX - 기본키, 시퀀스
-		Name VARCHAR(50) not null, #이름
+		Idx  INT(3) PRIMARY KEY AUTO_INCREMENT, #IDX - 기본키, 시퀀스
+		Name VARCHAR(50) NOT NULL, #이름
 		UserID VARCHAR(30), #ID 
 		Info VARCHAR(30), #PW 
-		IdentityNum VARCHAR(20) not null, #주민번호 
-		Gender VARCHAR(30) not null, #성별
-		Email VARCHAR(50) not null, #Email
-		PhoneNumber VARCHAR(30) not null, #휴대전화
-		Address VARCHAR(255) not null, #주소
-		AddressDetail VARCHAR(255) not null, #상세주소
+		IdentityNum VARCHAR(20) NOT NULL, #주민번호 
+		Gender VARCHAR(30) NOT NULL, #성별
+		Email VARCHAR(50) NOT NULL, #Email
+		PhoneNumber VARCHAR(30) NOT NULL, #휴대전화
+		Address VARCHAR(255) NOT NULL, #주소
+		AddressDetail VARCHAR(255) NOT NULL, #상세주소
 		Platform VARCHAR(20), #플랫폼
 		Minimi VARCHAR(30), #미니미 
 		DotoryNum INT(10), #도토리 개수 
@@ -198,7 +198,7 @@
 
 	#일촌평 테이블
 	CREATE TABLE Ilchonpyeong (
-		Num INT(38), #일촌평 번호
+		Num INT(38) PRIMARY KEY, #일촌평 번호
 		IlchonpyeongText VARCHAR(255), #일촌평 내용
 		IlchonpyeongIdx INT(38), #미니홈피 유저 IDX
 		CONSTRAINT fk_IlchonpyeongIdx FOREIGN KEY(IlchonpyeongIdx) REFERENCES SignUp(Idx) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
@@ -214,7 +214,7 @@
 
 	#다이어리 테이블
 	Create TABLE Diary (
-		DiaryContentRef INT(20), #다이어리 글 번호
+		DiaryContentRef INT(20) PRIMARY KEY, #다이어리 글 번호
 		DiaryContent LONGTEXT, #다이어리 글 내용
 		DiaryRegdate DATETIME, #다이어리 글 작성 일자
 		DiaryIdx INT(38), #미니홈피 유저 IDX
@@ -223,7 +223,7 @@
 
 	#갤러리 테이블
 	CREATE TABLE Gallery (
-		GalleryContentRef INT(20), #게시글 번호
+		GalleryContentRef INT(20) PRIMARY KEY, #게시글 번호
 		GalleryContent LONGTEXT, #게시글 내용
 		GalleryFileName VARCHAR(50), #게시글 파일 이름
 		GalleryRegdate DATETIME, #게시글 작성 일자
@@ -256,11 +256,10 @@
 		CONSTRAINT fk_GalleryLikeRef FOREIGN KEY(GalleryIdx) REFERENCES Gallery(GalleryContentRef) ON DELETE CASCADE ON UPDATE CASCADE, #포린키 연결
 		GalleryLikeSession INT(38) #로그인 유저 IDX
 	);
-	SELECT * FROM GalleryLike;
 
 	#방명록 테이블
 	CREATE TABLE GuestBook (
-		GuestBookContentRef INT(5), #방명록 번호
+		GuestBookContentRef INT(5) PRIMARY KEY, #방명록 번호
 		GuestBookContent LONGTEXT, #방명록 내용
 		GuestBookContentName VARCHAR(100), #방명록 작성자 이름
 		GuestBookRegdate DATETIME, #방명록 작성 일자
