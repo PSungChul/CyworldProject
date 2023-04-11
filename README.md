@@ -4,8 +4,11 @@
 ### 📌 사라진 Cyworld를 재현 및 재구성
 #### 학원에서 2주간 진행된 웹 개발 팀 프로젝트로 프론트엔드 1명 백엔드 4명 총 5명이서 팀을 꾸려 프론트 1명 백엔드 4명으로 지금은 사라진 싸이월드를 재현해 보았습니다.
 
+*
+
 ### 📌 CyworldProject ppt 자료
 [Cyworld_Project.pptx](https://github.com/PSungChul/CyworldProject/files/11197676/Cyworld_Project.pptx)
+
 #
 
 ### 📌 프로젝트내 나의 역할들
