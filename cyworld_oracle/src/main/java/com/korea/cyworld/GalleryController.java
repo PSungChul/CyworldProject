@@ -158,23 +158,43 @@ public class GalleryController {
 		
 		// 업로드된 파일이 없을 경우 파일 이름 지정
 		String galleryFileName = "no_file";
+		// 업로드된 파일이 없는 경우 확장자에 파일 없음 지정
+		vo.setGalleryFileExtension("no_file");
 		
 		// 업로드된 파일이 있을 경우
 		if ( !galleryFile.isEmpty() ) {
 			// 업로드된 파일의 원본 이름을 지정
 			galleryFileName = galleryFile.getOriginalFilename();
+			/* 확장자 구하기
+			 * 파일 원본 이름에서 마지막 .이 들어간 위치에서 한 칸 더한 위치부터 끝까지 잘라내기
+			 * ex) 19292930388시바견.img --> .img --> img
+			 */
+			String extension = galleryFileName.substring( galleryFileName.lastIndexOf( "." ) + 1 );
+			// 파일 종류가 비디오일 경우
+			if ( extension.equals("mp4") ) {
+				// 사진 이름 중복 및 한글 깨짐 방지를 위해 사진 이름을 시간으로 변경
+				long time = System.currentTimeMillis();
+				galleryFileName = String.format("%d.%s", time, extension);
+				// 확장자에 비디오 지정
+				vo.setGalleryFileExtension("video");
+			// 파일 종류가 이미지일 경우
+			} else if ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) {
+				// 사진 이름 중복 및 한글 깨짐 방지를 위해 사진 이름을 시간으로 변경
+				long time = System.currentTimeMillis();
+				galleryFileName = String.format("%d.%s", time, extension);
+				// 확장자에 이미지 지정
+				vo.setGalleryFileExtension("image");
+			// 업로드된 파일의 종류가 사용할 수 없는 경우
+			} else {
+				// 확장자에 파일 없음 지정
+				vo.setGalleryFileExtension("no_file");
+			}
 			// 파일을 저장할 경로를 지정
 			File saveFile = new File(savePath, galleryFileName);
 			// 저장할 경로가 없을 경우
 			if(!saveFile.exists()) {
 				// 경로를 생성
 				saveFile.mkdirs();
-			// 저장할 경로가 있을 경우
-			}else {
-				// 파일명 중복 방지를 위해 파일명 앞에 시간 추가
-				long time = System.currentTimeMillis();
-				galleryFileName = String.format("%d_%s", time, galleryFileName);
-				saveFile = new File(savePath, galleryFileName);
 			}
 			// 업로드된 파일을 실제로 저장 - try~catch 필요
 			try {
@@ -185,29 +205,6 @@ public class GalleryController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		/* 확장자 구하기
-		 * 파일 원본 이름에서 마지막 .이 들어간 위치에서 한 칸 더한 위치부터 끝까지 잘라내기
-		 * ex) 19292930388시바견.img --> .img --> img
-		 */
-		String extension = galleryFileName.substring( galleryFileName.lastIndexOf( "." ) + 1 );
-		// 파일 종류가 비디오일 경우
-		if ( extension.equals("mp4") ) {
-			// 확장자에 비디오 지정
-			vo.setGalleryFileExtension("video");
-		// 파일 종류가 이미지일 경우
-		} else if ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) {
-			// 확장자에 이미지 지정
-			vo.setGalleryFileExtension("image");
-		// 업로드된 파일이 없는 경우
-		} else if ( galleryFileName.equals("no_file") ) {
-			// 확장자에 파일 없음 지정
-			vo.setGalleryFileExtension("no_file");
-		// 업로드된 파일의 종류가 사용할 수 없는 경우
-		} else {
-			// 확장자에 파일 없음 지정
-			vo.setGalleryFileExtension("no_file");
 		}
 		
 		// 해당 idx의 사진첩에 작성된 글 개수 조회
@@ -343,18 +340,36 @@ public class GalleryController {
 			delFile.delete();
 			// 업로드된 파일의 원본 이름을 지정
 			galleryFileName = galleryFile.getOriginalFilename();
+			/* 확장자 구하기
+			 * 파일 원본 이름에서 마지막 .이 들어간 위치에서 한 칸 더한 위치부터 끝까지 잘라내기
+			 * ex) 19292930388시바견.img --> .img --> img
+			 */
+			String extension = galleryFileName.substring( galleryFileName.lastIndexOf( "." ) + 1 );
+			// 파일 종류가 비디오일 경우
+			if ( extension.equals("mp4") ) {
+				// 사진 이름 중복 및 한글 깨짐 방지를 위해 사진 이름을 시간으로 변경
+				long time = System.currentTimeMillis();
+				galleryFileName = String.format("%d.%s", time, extension);
+				// 확장자에 비디오 지정
+				vo.setGalleryFileExtension("video");
+			// 파일 종류가 이미지일 경우
+			} else if ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) {
+				// 사진 이름 중복 및 한글 깨짐 방지를 위해 사진 이름을 시간으로 변경
+				long time = System.currentTimeMillis();
+				galleryFileName = String.format("%d.%s", time, extension);
+				// 확장자에 이미지 지정
+				vo.setGalleryFileExtension("image");
+			// 업로드된 파일의 종류가 사용할 수 없는 경우
+			} else {
+				// 확장자에 파일 없음 지정
+				vo.setGalleryFileExtension("no_file");
+			}
 			// 파일을 저장할 경로를 지정
 			File saveFile = new File(savePath, galleryFileName);
 			// 저장할 경로가 없을 경우
 			if(!saveFile.exists()) {
 				// 경로를 생성
 				saveFile.mkdirs();
-			// 저장할 경로가 있을 경우
-			}else {
-				// 파일명 중복 방지를 위해 파일명 앞에 시간 추가
-				long time = System.currentTimeMillis();
-				galleryFileName = String.format("%d_%s", time, galleryFileName);
-				saveFile = new File(savePath, galleryFileName);
 			}
 			// 업로드된 파일을 실제로 등록 - try~catch 필요
 			try {
@@ -367,29 +382,6 @@ public class GalleryController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		/* 확장자 구하기
-		 * 파일 원본 이름에서 마지막 .이 들어간 위치에서 한 칸 더한 위치부터 끝까지 잘라내기
-		 * ex) 19292930388시바견.img --> .img --> img
-		 */
-		String extension = galleryFileName.substring( galleryFileName.lastIndexOf( "." ) + 1 );
-		// 파일 종류가 비디오일 경우
-		if ( extension.equals("mp4") ) {
-			// 확장자에 비디오 지정
-			vo.setGalleryFileExtension("video");
-		// 파일 종류가 이미지일 경우
-		} else if ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) {
-			// 확장자에 이미지 지정
-			vo.setGalleryFileExtension("image");
-		// 업로드된 파일이 없는 경우
-		} else if ( galleryFileName.equals("no_file") ) {
-			// 확장자에 파일 없음 지정
-			vo.setGalleryFileExtension("no_file");
-		// 업로드된 파일의 종류가 사용할 수 없는 경우
-		} else {
-			// 확장자에 파일 없음 지정
-			vo.setGalleryFileExtension("no_file");
 		}
 		
 		// 수정된 파일 및 게시글로 갱신

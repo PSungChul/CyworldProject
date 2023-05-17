@@ -198,18 +198,20 @@ public class ProfileController {
 			delFile.delete();
 			// 업로드된 사진의 원본 이름을 지정
 			mainPhoto = mainPhotoFile.getOriginalFilename();
+			/* 확장자 구하기
+			 * 파일 원본 이름에서 마지막 .이 들어간 위치에서 한 칸 더한 위치부터 끝까지 잘라내기
+			 * ex) 19292930388시바견.img --> .img --> img
+			 */
+			String extension = mainPhoto.substring( mainPhoto.lastIndexOf( "." ) + 1 );
+			// 사진 이름 중복 및 한글 깨짐 방지를 위해 사진 이름을 시간으로 변경
+			long time = System.currentTimeMillis();
+			mainPhoto = String.format("%d.%s", time, extension);
 			// 사진 저장할 경로를 지정
 			File saveFile = new File(savePath, mainPhoto);
 			// 저장할 경로가 없을 경우
 			if(!saveFile.exists()) {
 				// 경로를 생성
 				saveFile.mkdirs();
-			// 저정할 경로가 있을 경우
-			}else {
-				// 사진 이름 중복 방지를 위해 사진 이름 앞에 시간 추가
-				long time = System.currentTimeMillis();
-				mainPhoto = String.format("%d_%s", time, mainPhoto);
-				saveFile = new File(savePath, mainPhoto);
 			}
 			// 업로드된 사진을 실제로 저장 - try~catch 필요
 			try {
