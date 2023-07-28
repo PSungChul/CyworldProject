@@ -28,7 +28,14 @@
 							<span class="todayIconText">Today is..</span><img class="box animate__animated animate__headShake animate__infinite" src="resources/images/emoticon1.png" alt="">
 						</div>
 						<!-- 프로필 사진 -->
-						<div class="left-image"><img class="leftImg" src="/cyworld_oracle/resources/mainphoto/${ signVo.mainPhoto }" alt=""></div>
+						<div class="left-image">
+							<c:if test="${ signVo.mainPhoto eq 'noImage' }">
+								<img class="leftImg" src="resources/images/noImage.jpeg" alt="">
+							</c:if>
+							<c:if test="${ signVo.mainPhoto ne 'noImage' }">
+								<img class="leftImg" src="/cyworld_oracle/resources/mainphoto/${ signVo.mainPhoto }" alt="">
+							</c:if>
+						</div>
 						<!-- 프로필 소개글 -->
 						<textarea class="left-textarea" id="scrollBar" readonly>${ signVo.mainText }</textarea>
 						<!-- 히스토리 -->

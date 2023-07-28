@@ -394,7 +394,7 @@ public class SignUpController {
 				vo.setMinimi("mainMinimi.png"); // 기본 미니미 지정
 				vo.setDotoryNum(0); // 기본 도토리 개수 지정
 				vo.setMainTitle("안녕하세요~ " + vo.getName() + "님의 미니홈피입니다!"); // 메인 화면 제목
-				vo.setMainPhoto("no_photo"); // 메인 화면 사진 지정
+				vo.setMainPhoto("noImage"); // 메인 화면 사진 지정
 				vo.setMainText(vo.getName() + "님의 미니홈피에 오신걸 환영합니다!"); // 메인 화면 소개글
 				vo.setIlchon(0); // 일촌 수 지정
 				vo.setToday(0); // 일일 조회수
@@ -414,7 +414,7 @@ public class SignUpController {
 				vo.setMinimi("mainMinimi.png"); // 기본 미니미 지정
 				vo.setDotoryNum(0); // 기본 도토리 개수 지정
 				vo.setMainTitle("안녕하세요~ " + vo.getName() + " 님의 미니홈피입니다!"); // 메인 화면 제목
-				vo.setMainPhoto("no_photo"); // 메인 화면 사진 지정
+				vo.setMainPhoto("noImage"); // 메인 화면 사진 지정
 				vo.setMainText(vo.getName() + "님의 미니홈피에 오신걸 환영합니다!"); // 메인 화면 소개글
 				vo.setIlchon(0); // 일촌 수 지정
 				vo.setToday(0); // 일일 조회수

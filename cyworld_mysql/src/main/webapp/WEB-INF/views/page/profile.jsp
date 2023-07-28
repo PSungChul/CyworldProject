@@ -34,8 +34,15 @@
 							<!-- 해당 미니홈피 유저의 idx -->
 							<input name="idx" type="hidden" value="${ signVo.idx }">
 							<!-- 기존 프로필 사진 -->
-							<div class="left-image"><img class="leftImg" src="/cyworld_mysql/resources/mainphoto/${ signVo.mainPhoto }" alt=""></div>
-													<input name="mainPhoto" type="hidden" value="${ signVo.mainPhoto }">
+							<div class="left-image">
+								<c:if test="${ signVo.mainPhoto eq 'noImage' }">
+									<img class="leftImg" src="resources/images/noImage.jpeg" alt="">
+								</c:if>
+								<c:if test="${ signVo.mainPhoto ne 'noImage' }">
+									<img class="leftImg" src="/cyworld_mysql/resources/mainphoto/${ signVo.mainPhoto }" alt="">
+								</c:if>
+							</div>
+							<input name="mainPhoto" type="hidden" value="${ signVo.mainPhoto }">
 							<!-- 프로필 사진 수정 -->
 							<input id="btn-cover" class="selectFile" name="mainPhotoFile" type="file">
 							<!-- 기존 프로필 소개글 및 수정 -->
